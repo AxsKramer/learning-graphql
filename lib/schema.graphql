@@ -1,0 +1,106 @@
+"Valida los tipos de nivel"
+enum Level {
+  principiante
+  intermedio
+  avanzado
+}
+
+union GlobalSearch = Course | Student | Monitor
+
+type Course {
+  _id: ID!
+  title: String!
+  teacher: String
+  description: String!
+  topic: String,
+  people: [Student]
+  level: Level
+}
+
+interface Person {
+  _id: ID!
+  name: String!
+  email: String!
+}
+
+type Student implements Person {
+  _id: ID!
+  name: String!
+  email: String!
+  avatar: String
+}
+
+type Monitor implements Person {
+  _id: ID!
+  name: String!
+  email: String!
+  phone: String
+}
+
+type Query {
+  "Devuelve todos cursos"
+  getCourses: [Course]
+  "Devuelve un curso"
+  getCourse(id: ID!): Course
+  "Elimina un curso"
+  deleteCourse(id: ID!): String
+  "Devuelve todos los estudiantes"
+  getPeople: [Person]
+  "Devuelve un estudiante"
+  getPerson(id: ID!): Person
+  "Elimina un curso"
+  deleteStudent(id: ID!): String
+  "Agrega una persona a un curso"
+  addPeopleToCourse(courseID: ID!, personID: ID!): Course
+  "Ejecuta una busqueda global"
+  searchItems(keyword: String!) :[GlobalSearch] 
+  
+}
+
+input CourseInput {
+  title: String!
+  teacher: String
+  description: String!
+  topic: String
+  level: Level
+}
+
+input EditCourseInput {
+  title: String
+  teacher: String
+  description: String
+  topic: String
+  level: Level
+}
+
+input PersonInput {
+  name: String!
+  email: String!
+  phone: String
+  avatar: String
+}
+
+input EditPersonInput {
+  name: String
+  email: String
+  phone: String
+  avatar: String
+}
+
+type Mutation {
+  "Crea un curso"
+  createCourse(input: CourseInput!): Course
+  "Edita curso"
+  editCourse(_id: ID!, input: EditCourseInput): Course
+  "Elimina curso"
+  deleteCourse(_id: ID!): String
+  "Crea un estudiante"
+  createPerson(input: PersonInput!): Person
+  "Edita estudiante"
+  editPerson(_id: ID!, input: EditPersonInput): Person
+  "Elimina estudiante"
+  deletePerson(_id: ID!): String
+  "Agrega una persona a un curso"
+  addPeopleToCourse(courseID: ID!, personID: ID!): Course
+
+}
